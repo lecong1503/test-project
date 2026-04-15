@@ -11,41 +11,41 @@ private:
     string loai;
     double soTien;
 public:
-    GiaoDich(string l, double s) { // Constr crea gd
+    GiaoDich(string l, double s) { 
         loai = l; soTien = s;
     }
 
-    string getLoai() { return loai; } //gete lay doto
+    string getLoai() { return loai; } 
     double getSoTien() { return soTien; }
 
-    void hienThi() { //prnt
+    void hienThi() { 
         cout << loai << " | So tien: " << soTien << endl;
     }
 };
 
 // ================== TAI KHOAN ==================
-class TaiKhoan { //lop dod
+class TaiKhoan { 
 protected:
-	vector<GiaoDich> lichSu;//ds gd
+	vector<GiaoDich> lichSu;
     string soTK;
     double soDu;
-public:// Constr: khoit tk
+public:
     TaiKhoan(string stk, double sd) {
         soTK = stk;
         soDu = sd;
     }
-    virtual ~TaiKhoan() {}//détr a?o
+    virtual ~TaiKhoan() {}
 
-    virtual/* da hình (polymorphism)*/ void hienThi() { //ht,in tt tk
+    virtual void hienThi() { 
     cout << "So TK: " << soTK
-         << " | So du: " << fixed << setprecision(0)/*tp*/ << soDu
-         << " | Lai: " << tinhLai()/*ply*/ << endl;
+         << " | So du: " << fixed << setprecision(0) << soDu
+         << " | Lai: " << tinhLai() << endl;
 }
 
     virtual void napTien(double tien) {
     if (tien > 0) {
         soDu += tien;
-        lichSu.push_back(GiaoDich("Nap", tien));//save ls
+        lichSu.push_back(GiaoDich("Nap", tien));
     }
 }
 
@@ -58,12 +58,12 @@ public:// Constr: khoit tk
     } else cout << "Khong du tien!\n";
 }
 
-    virtual double tinhLai() { return 0; } //stort 0, ham ao v, override
+    virtual double tinhLai() { return 0; } 
 
     string getSoTK() { return soTK; }
     double getSoDu() { return soDu; }
     
-    void hienThiLichSu() {  //duet vect
+    void hienThiLichSu() {  
     for (auto &gd : lichSu)
         gd.hienThi();
 }
@@ -75,36 +75,36 @@ public:// Constr: khoit tk
 class TietKiem : public TaiKhoan { 
 public:
     TietKiem(string stk, double sd) : TaiKhoan(stk, sd) {}
-    double tinhLai() override { return soDu * 0.05; } // interest, oveide
+    double tinhLai() override { return soDu * 0.05; } 
 };
 
 // ===== THANH TOAN =====kt
 class ThanhToan : public TaiKhoan {
 public:
     ThanhToan(string stk, double sd) : TaiKhoan(stk, sd) {}
-    double tinhLai() override { return soDu * 0.01; }// oveide
+    double tinhLai() override { return soDu * 0.01; }
 };
 
 // ================== KHACH HANG ==================
 class KhachHang {
 private:
 	
-    string ten, cccd;//Ðóng gói (Encapsulation), acces thr strin
-    vector<TaiKhoan*> dsTK;// tro lop cha,spprt dh, qli obj
+    string ten, cccd;
+    vector<TaiKhoan*> dsTK;
 public:
 	string getCCCD() { return cccd; }
     KhachHang(string t, string c) {
         ten = t; cccd = c;
     }
 
-    void themTaiKhoan(TaiKhoan* tk) {// + tk, luu con tro ds, dh
+    void themTaiKhoan(TaiKhoan* tk) {
         dsTK.push_back(tk);
     }
 
-    vector<TaiKhoan*>& getDSTK() { return dsTK; }//duetdliu
+    vector<TaiKhoan*>& getDSTK() { return dsTK; }
     string getTen() { return ten; }
     
-    ~KhachHang() {//destr, gp doto
+    ~KhachHang() {
     for (auto tk : dsTK) {
         delete tk;
     }
@@ -114,8 +114,8 @@ public:
 	
 	void xoaTaiKhoan(string stk) {
     for (auto it = dsTK.begin(); it != dsTK.end(); ++it) {
-        if ((*it)->getSoTK() == stk) { //del tk
-            delete *it;//del, gp rom
+        if ((*it)->getSoTK() == stk) { 
+            delete *it;
             dsTK.erase(it);
             cout << "Da xoa tai khoan!\n";
             return;
@@ -130,10 +130,10 @@ public:
 // ================== NGAN HANG ================== 
 class NganHang {
 private:
-    vector<KhachHang*> dsKH;//luu customr, ds
+    vector<KhachHang*> dsKH;
 
 public:
-    void themKhachHang() {// nhap -> + vec
+    void themKhachHang() {
         string ten, cccd;
         cout << "Nhap ten: "; cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		 getline(cin, ten);
@@ -144,7 +144,7 @@ public:
 
     KhachHang* chonKhachHang() {
     for (int i = 0; i < dsKH.size(); i++) {
-        cout << i << ". " << dsKH[i]->getTen()// hthi ds
+        cout << i << ". " << dsKH[i]->getTen()
      << " (" << dsKH[i]->getCCCD() << ")" << endl;
     }
     int chon;
@@ -170,7 +170,7 @@ public:
         cin >> loai;
 
         if (loai == 1)
-            kh->themTaiKhoan(new TietKiem(stk, sd));// tao obj,dh rultimr
+            kh->themTaiKhoan(new TietKiem(stk, sd));
         else
             kh->themTaiKhoan(new ThanhToan(stk, sd));
     }
@@ -196,12 +196,12 @@ public:
     cout << "Nhap so TK can xoa: ";
     cin >> stk;
 
-   for (auto kh : dsKH) { //duet2lv
+   for (auto kh : dsKH) { 
         kh->xoaTaiKhoan(stk);
     }
 }
 	
-    TaiKhoan* timTK(string stk) {//find tk, obj,dh
+    TaiKhoan* timTK(string stk) {
         for (auto &kh : dsKH)
             for (auto tk : kh->getDSTK())
                 if (tk->getSoTK() == stk)
@@ -246,7 +246,7 @@ public:
         TaiKhoan* tk2 = timTK(b);
 
         if (tk1 && tk2 && tk1->getSoDu() >= t) {
-            tk1->rutTien(t);//gai hom? ()polymorphism
+            tk1->rutTien(t);
             tk2->napTien(t);
             cout << "Thanh cong!\n";
         } else cout << "That bai!\n";
@@ -267,15 +267,15 @@ public:
         }
     }
 }
-    void thongKe() {// thong ke
+    void thongKe() {
     int tongKH = dsKH.size();
     int tongTK = 0;
     double tongTien = 0;
 
     for (auto &kh : dsKH) {
         tongTK += kh->getDSTK().size();
-        for (auto tk : kh->getDSTK())//
-            tongTien += tk->getSoDu();//
+        for (auto tk : kh->getDSTK())
+            tongTien += tk->getSoDu();
     }
 
     cout << "Tong KH: " << tongKH << endl;
@@ -284,10 +284,10 @@ public:
 }
 	
 	void luuFile() {
-    ofstream file("data.txt");//save
+    ofstream file("data.txt");
 
     for (auto &kh : dsKH) {
-        file << kh->getTen() << "|" << kh->getCCCD() << endl;//
+        file << kh->getTen() << "|" << kh->getCCCD() << endl;
 
         for (auto tk : kh->getDSTK()) {
             file << tk->getSoTK() << " "
@@ -304,7 +304,7 @@ void docFile() {
     for (auto kh : dsKH) {
     delete kh;
 }
-	dsKH.clear(); // xóa d? li?u cu
+	dsKH.clear(); 
     ifstream file("data.txt");
 
     if (!file) {
@@ -315,12 +315,12 @@ void docFile() {
     string line;
     KhachHang* kh = nullptr;
 
-    while (getline(file, line)) {//read
-        if (line == "#") {//
-            kh = nullptr; // end 1 khách
+    while (getline(file, line)) {
+        if (line == "#") {
+            kh = nullptr; 
         }
         else if (line.find("|") != string::npos) {
-            // dòng khách hàng
+            
             int pos = line.find("|");
             string ten = line.substr(0, pos);
             string cccd = line.substr(pos + 1);
@@ -329,15 +329,15 @@ void docFile() {
             dsKH.push_back(kh);
         }
         else {
-            // dòng tk
+            
             if (kh != nullptr) {
                 string stk;
                 double sd;
 
-                stringstream ss(line);//sprerat chuoi - bien
+                stringstream ss(line);
                 ss >> stk >> sd;
 
-                // mc dnh to tk than math
+                
                 kh->themTaiKhoan(new ThanhToan(stk, sd));
             }
         }
@@ -359,7 +359,7 @@ int main() {
     NganHang nh;
     int chon;
 
-    do {//menu, laap
+    do {
         cout << "\n=== MENU ===\n";
         cout << "1. Them khach hang\n";
         cout << "2. Them tai khoan\n";
@@ -376,7 +376,7 @@ int main() {
         cout << "Chon: ";
         cin >> chon;
 
-        switch (chon) {//clled ln nganhang, cn 
+        switch (chon) { 
         case 1: nh.themKhachHang(); break;
         case 2: nh.themTaiKhoan(); break;
         case 3: nh.napTien(); break;
